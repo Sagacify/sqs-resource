@@ -48,8 +48,12 @@ export const pollMessage = params => new BPromise((resolve, reject) => {
       if (messages) {
         resolve(messages);
       } else {
-        log.debug('SQS_POLL_MESSAGE_THROTTLE', { throttling: params.throttling || 1000 }, params);
-        setTimeout(() => pollMessage(params).then(resolve).catch(reject), params.throttling);
+        log.debug('SQS_POLL_MESSAGE_THROTTLE', {
+          throttling: params.throttling || 1000
+        }, params);
+        setTimeout(() => {
+          pollMessage(params).then(resolve).catch(reject);
+        }, params.throttling);
       }
     })
     .catch(err => {
