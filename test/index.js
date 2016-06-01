@@ -13,7 +13,6 @@ describe('all methods are available', () => {
     'init',
     'sendMessage',
     'receiveMessage',
-    'pollMessage',
     'deleteMessage'
   ].forEach(method => {
     it(`${method} is available`, () => {
