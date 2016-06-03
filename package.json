@@ -1,6 +1,6 @@
 {
   "name": "sqs-resource",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A bridge to AWS SQS service with proper logging and promisifying.",
   "main": "dist/index.js",
   "scripts": {
