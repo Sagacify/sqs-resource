@@ -14,7 +14,7 @@ export const sendMessage = params => new BPromise((resolve, reject) => {
   sqs.sendMessage(params, (err, data) => {
     if (err) {
       log.error('SQS_SEND_MESSAGE_FAIL', err, params);
-      reject(err);
+      return reject(err);
     }
 
     log.debug('SQS_SEND_MESSAGE_SUCCESS', data, params);
@@ -30,7 +30,7 @@ export const receiveMessage = (params, pollThrottling = null) => {
     sqs.receiveMessage(params, (err, data) => {
       if (err) {
         log.error('SQS_RECEIVE_MESSAGE_FAIL', err, meta);
-        reject(err);
+        return reject(err);
       }
 
       if (!data.Messages || !data.Messages.length) {
@@ -42,9 +42,10 @@ export const receiveMessage = (params, pollThrottling = null) => {
             receiveMessage(params, pollThrottling).then(resolve).catch(reject);
           }, pollThrottling);
         }
+      } else {
+        log.debug('SQS_RECEIVE_MESSAGE_SUCCESS', data, meta);
+        resolve(data.Messages);
       }
-      log.debug('SQS_RECEIVE_MESSAGE_SUCCESS', data, meta);
-      resolve(data.Messages);
     });
   });
 };
@@ -54,10 +55,10 @@ export const deleteMessage = params => new BPromise((resolve, reject) => {
   sqs.deleteMessage(params, (err, data) => {
     if (err) {
       log.error('SQS_DELETE_MESSAGE_FAIL', err, params);
-      reject(err);
+      return reject(err);
     }
 
     log.debug('SQS_DELETE_MESSAGE_SUCCESS', data, params);
-    return resolve();
+    resolve();
   });
 });
